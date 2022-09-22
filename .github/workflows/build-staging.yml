@@ -14,7 +14,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
+  build_push_image:
     # The type of runner that the job will run on
     runs-on: ubuntu-20.04
 
@@ -119,4 +119,36 @@ jobs:
           # Ulimit options (e.g., nofile=1024:1024)
           #ulimit: # optional
           # GitHub Token used to authenticate against a repository for Git context
-          #github-token: # optional, default is ${{ github.token }}          
+          #github-token: # optional, default is ${{ github.token }}  
+  deploy:
+    runs-on: ubuntu-20.04
+    needs: build_push_image # Will wait for the execution of the previous job        
+    
+    steps:
+      - uses: actions/checkout@v2    
+      - name: Install Helm
+        uses: Azure/setup-helm@v3.3
+        #with:
+          # Version of helm
+          #version: # default is latest
+          # GitHub token. Required only if 'version' == 'latest'
+          #token: # optional      
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}       
+      - name: Get AKS Credentials
+        uses: Azure/aks-set-context@v3
+        with:
+          # Resource Group Name
+          resource-group: mslearn-gh-pipelines-1977
+          # AKS Cluster Name
+          cluster-name: contoso-video 
+          # AKS Cluster Subscription
+          subscription: Visual Studio Enterprise Subscription – MPN
+          # Get cluster admin credentials. Values: true or false
+          #admin: # optional
+          # Enables kubelogin for non-admin user scenario. Values: true or false
+          #use-kubelogin: # optional          
+
+      #- name: Run Helm Deploy
+      #  run:
