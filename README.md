@@ -151,3 +151,71 @@ Privacy information can be found at https://privacy.microsoft.com/en-us/
 
 Microsoft and any contributors reserve all other rights, whether under their respective copyrights, patents,
 or trademarks, whether by implication, estoppel or otherwise.
+
+## Steps
+
+- bash>`cd mslearn-aks-deployment-pipeline-github-actions`
+- bash>`./init.sh`
+`output
+-> Resource Group Name: mslearn-gh-pipelines-1977
+-> ACR Name: contosocontainerregistry26700
+-> ACR Login Username: contosocontainerregistry26700
+-> ACR Password: uJWyL8Jx=TxdXzVwu5Y8AxhOlz1WGiht
+-> AKS Cluster Name: contosocontainerregistry26700
+-> AKS DNS Zone Name: 1f1d697eca204713895b.eastus.aksapp.io`
+- bash>`az group list -o table`
+- bash>`az acr list -o table`
+
+## Build Action 
+
+- bash>`az acr list --query "[?contains(resourceGroup, 'mslearn-gh-pipelines')].loginServer" -o table`
+- bash>`az acr credential show --name contosocontainerregistry26700 --query "username" -o table`
+- bash>`az acr credential show --name contosocontainerregistry26700 --query "passwords[0].value" -o table`
+- bash>`az acr repository list --name contosocontainerregistry26700 -o table`
+
+## PAT Github
+
+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
+
+- bash>`git pull`
+- bash>`git tag -a v2.0.0 -m 'First tag'`
+- bash>`git push --tags`
+- bash>`az acr repository show-tags --repository contoso-website --name contosocontainerregistry26700 -o table`
+
+## Create Helm Chart
+
+- bash>`helm version`
+- bash>`git pull origin main`
+- bash>`cd kubernetes/`
+- bash>`helm create contoso-website`
+- bash>`cd contoso-website/`
+- bash>`rm -rf charts/ templates/`
+- bash>`mkdir templates`
+- bash>`cd ../../`
+- bash>`cp -r ./kubernetes/ ./contoso-website/`
+- bash>`mv ../*.yaml ./templates`
+- bash>`git add .`
+- bash>`git commit -m "Add helm"`
+- bash>`git push -u origin main`
+
+## AKS Deploy
+
+- bash>`az aks list -o tsv --query "[?name=='contoso-video'].resourceGroup"`
+- bash>`az ad sp create-for-rbac --name "http://contoso.epsilonnet.gr" --role contributor --scopes /subscriptions/de8c9606-2f81-4ce0-9ad8-efd9feb7d97e/resourceGroups/````
+```
+mslearn-gh-pipelines-1977 --sdk-auth`
+Retrying role assignment creation: 1/36
+Retrying role assignment creation: 2/36
+{
+  "clientId": "92f02e54-853a-4a50-9b70-62cd11490020",
+  "clientSecret": "99e6d8cf-738a-4ad2-833a-2902cc864149",
+  "subscriptionId": "de8c9606-2f81-4ce0-9ad8-efd9feb7d97e",
+  "tenantId": "54a6385f-8ade-4892-a404-d486b55a6746",
+  "activeDirectoryEndpointUrl": "https://login.microsoftonline.com",
+  "resourceManagerEndpointUrl": "https://management.azure.com/",
+  "activeDirectoryGraphResourceId": "https://graph.windows.net/",
+  "sqlManagementEndpointUrl": "https://management.core.windows.net:8443/",
+  "galleryEndpointUrl": "https://gallery.azure.com/",
+  "managementEndpointUrl": "https://management.core.windows.net/"
+}
+```
