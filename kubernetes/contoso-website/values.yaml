@@ -1,5 +1,5 @@
 image:
-  registry: contosocontainerregistry26700
+  registry: contosocontainerregistry26700.azurecr.io
   name: contoso-website
   tag: latest
 dns:
