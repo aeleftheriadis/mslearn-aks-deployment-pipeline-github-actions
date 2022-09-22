@@ -150,5 +150,16 @@ jobs:
           # Enables kubelogin for non-admin user scenario. Values: true or false
           #use-kubelogin: # optional          
 
-      #- name: Run Helm Deploy
-      #  run:
+      - name: Run Helm Deploy
+        run: |
+          helm upgrade \
+            --install \
+            --create-namespace \
+            --atomic \
+            --wait \
+            --namespace staging \
+            contoso-website \
+            ./kubernetes/contoso-website \
+            --set image.repository=${{ secrets.ACR_NAME }} \
+            --set dns.name=${{ secrets.DNS_NAME }}
+        
