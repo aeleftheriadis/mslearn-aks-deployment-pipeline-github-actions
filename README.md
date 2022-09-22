@@ -201,7 +201,8 @@ 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
 ## AKS Deploy
 
 - bash>`az aks list -o tsv --query "[?name=='contoso-video'].resourceGroup"`
-- bash>`az ad sp create-for-rbac --name "http://contoso.epsilonnet.gr" --role contributor --scopes /subscriptions/de8c9606-2f81-4ce0-9ad8-efd9feb7d97e/resourceGroups/````
+- bash>`az ad sp create-for-rbac --name "http://contoso.epsilonnet.gr" --role contributor --scopes /subscriptions/de8c9606-2f81-4ce0-9ad8-efd9feb7d97e/resourceGroups/mslearn-gh-pipelines-1977 --sdk-auth`
+
 ```
 mslearn-gh-pipelines-1977 --sdk-auth`
 Retrying role assignment creation: 1/36
@@ -219,3 +220,5 @@ Retrying role assignment creation: 2/36
   "managementEndpointUrl": "https://management.core.windows.net/"
 }
 ```
+
+az aks show -g mslearn-gh-pipelines-1977 -n contoso-video -o tsv --query addonProfiles.httpApplicationRouting.config.HTTPApplicationRoutingZoneName
