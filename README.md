@@ -221,4 +221,5 @@ Retrying role assignment creation: 2/36
 }
 ```
 
-az aks show -g mslearn-gh-pipelines-1977 -n contoso-video -o tsv --query addonProfiles.httpApplicationRouting.config.HTTPApplicationRoutingZoneName
+- bash>`az aks show -g mslearn-gh-pipelines-1977 -n contoso-video -o tsv --query addonProfiles.httpApplicationRouting.config.HTTPApplicationRoutingZoneName`
+- bash>`git tag -a v2.0.1 -m 'Creating first production deployment' && git push --tags`
